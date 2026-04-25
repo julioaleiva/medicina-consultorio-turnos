@@ -1,0 +1,297 @@
+<!DOCTYPE html>
+<html lang="es">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Consultorio Demo</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,600;9..144,700&family=Manrope:wght@400;500;600;700&display=swap"
+      rel="stylesheet"
+    />
+    <link rel="stylesheet" href="/styles.css" />
+  </head>
+  <body>
+    <div class="page-shell">
+      <aside class="sidebar">
+        <div>
+          <p class="eyebrow">Demo consultorio</p>
+          <h1>Panel medico claro, moderno y listo para evolucionar.</h1>
+          <p class="lead">
+            Gestion basica de pacientes, turnos e historias clinicas con una arquitectura simple para demo local y futura migracion.
+          </p>
+        </div>
+
+        <nav class="nav-grid" id="nav-grid">
+          <button class="nav-card is-active" data-section="dashboard">Dashboard</button>
+          <button class="nav-card" data-section="patients">Pacientes</button>
+          <button class="nav-card" data-section="appointments">Turnos</button>
+          <button class="nav-card" data-section="records">Historias clinicas</button>
+        </nav>
+
+        <div class="sidebar-note">
+          <span class="badge">Etapa 1</span>
+          <p>Puede compartirse temporalmente exponiendo este servidor Node con Cloudflare Tunnel o ngrok.</p>
+        </div>
+      </aside>
+
+      <main class="content">
+        <header class="topbar">
+          <div>
+            <p class="eyebrow">Sistema de consultorio</p>
+            <h2>Vista demo operativa</h2>
+          </div>
+          <button class="menu-toggle" id="menu-toggle" type="button">Menu</button>
+        </header>
+
+        <section class="flash hidden" id="flash"></section>
+
+        <section class="section is-visible" id="section-dashboard">
+          <div class="section-head">
+            <div>
+              <p class="eyebrow">Resumen</p>
+              <h3>Dashboard</h3>
+            </div>
+          </div>
+
+          <div class="stats-grid" id="dashboard-stats"></div>
+
+          <div class="cards-grid cards-grid--two">
+            <article class="panel">
+              <div class="panel-head">
+                <h4>Proximos turnos</h4>
+              </div>
+              <div id="dashboard-upcoming" class="stack-list"></div>
+            </article>
+
+            <article class="panel quick-links">
+              <div class="panel-head">
+                <h4>Accesos rapidos</h4>
+              </div>
+              <div class="quick-actions">
+                <button type="button" class="quick-action" data-section-target="patients">Nuevo paciente</button>
+                <button type="button" class="quick-action" data-section-target="appointments">Nuevo turno</button>
+                <button type="button" class="quick-action" data-section-target="records">Nueva evolucion</button>
+              </div>
+            </article>
+          </div>
+        </section>
+
+        <section class="section" id="section-patients">
+          <div class="section-head">
+            <div>
+              <p class="eyebrow">Modulo 1</p>
+              <h3>Pacientes</h3>
+            </div>
+            <label class="search-box">
+              <span>Buscar</span>
+              <input type="search" id="patient-search" placeholder="Nombre, apellido, DNI o telefono" />
+            </label>
+          </div>
+
+          <div class="cards-grid cards-grid--two">
+            <article class="panel">
+              <div class="panel-head">
+                <h4>Alta y edicion</h4>
+              </div>
+              <form id="patient-form" class="form-grid">
+                <input type="hidden" id="patient-id" />
+                <label>
+                  <span>Nombre</span>
+                  <input id="patient-first-name" required minlength="2" />
+                </label>
+                <label>
+                  <span>Apellido</span>
+                  <input id="patient-last-name" required minlength="2" />
+                </label>
+                <label>
+                  <span>DNI</span>
+                  <input id="patient-dni" required pattern="\d{7,10}" />
+                </label>
+                <label>
+                  <span>Fecha de nacimiento</span>
+                  <input id="patient-birth-date" type="date" required />
+                </label>
+                <label>
+                  <span>Telefono</span>
+                  <input id="patient-phone" required minlength="6" />
+                </label>
+                <label>
+                  <span>Email</span>
+                  <input id="patient-email" type="email" />
+                </label>
+                <label>
+                  <span>Obra social</span>
+                  <input id="patient-insurance" />
+                </label>
+                <label class="full-span">
+                  <span>Observaciones</span>
+                  <textarea id="patient-notes" rows="4"></textarea>
+                </label>
+                <div class="form-actions full-span">
+                  <button type="submit" class="primary-btn">Guardar paciente</button>
+                  <button type="button" class="ghost-btn" id="patient-reset">Limpiar</button>
+                </div>
+              </form>
+            </article>
+
+            <article class="panel">
+              <div class="panel-head">
+                <h4>Listado</h4>
+              </div>
+              <div class="table-shell">
+                <table>
+                  <thead>
+                    <tr>
+                      <th>Paciente</th>
+                      <th>DNI</th>
+                      <th>Contacto</th>
+                      <th>Obra social</th>
+                      <th></th>
+                    </tr>
+                  </thead>
+                  <tbody id="patients-table"></tbody>
+                </table>
+              </div>
+            </article>
+          </div>
+        </section>
+
+        <section class="section" id="section-appointments">
+          <div class="section-head">
+            <div>
+              <p class="eyebrow">Modulo 2</p>
+              <h3>Turnos</h3>
+            </div>
+            <div class="filters-inline">
+              <label>
+                <span>Vista por dia</span>
+                <input type="date" id="appointment-date-filter" />
+              </label>
+              <label>
+                <span>Buscar</span>
+                <input type="search" id="appointment-search" placeholder="Paciente o profesional" />
+              </label>
+            </div>
+          </div>
+
+          <div class="cards-grid cards-grid--two">
+            <article class="panel">
+              <div class="panel-head">
+                <h4>Alta y edicion</h4>
+              </div>
+              <form id="appointment-form" class="form-grid">
+                <input type="hidden" id="appointment-id" />
+                <label class="full-span">
+                  <span>Paciente</span>
+                  <select id="appointment-patient" required></select>
+                </label>
+                <label>
+                  <span>Fecha</span>
+                  <input id="appointment-date" type="date" required />
+                </label>
+                <label>
+                  <span>Hora</span>
+                  <input id="appointment-time" type="time" required />
+                </label>
+                <label>
+                  <span>Profesional</span>
+                  <input id="appointment-professional" required minlength="3" />
+                </label>
+                <label>
+                  <span>Estado</span>
+                  <select id="appointment-status" required>
+                    <option value="pendiente">Pendiente</option>
+                    <option value="confirmado">Confirmado</option>
+                    <option value="cancelado">Cancelado</option>
+                    <option value="atendido">Atendido</option>
+                  </select>
+                </label>
+                <label class="full-span">
+                  <span>Motivo</span>
+                  <textarea id="appointment-reason" rows="4" required></textarea>
+                </label>
+                <div class="form-actions full-span">
+                  <button type="submit" class="primary-btn">Guardar turno</button>
+                  <button type="button" class="ghost-btn" id="appointment-reset">Limpiar</button>
+                </div>
+              </form>
+            </article>
+
+            <article class="panel">
+              <div class="panel-head">
+                <h4>Agenda</h4>
+              </div>
+              <div id="appointments-list" class="stack-list"></div>
+            </article>
+          </div>
+        </section>
+
+        <section class="section" id="section-records">
+          <div class="section-head">
+            <div>
+              <p class="eyebrow">Modulo 3</p>
+              <h3>Historias clinicas</h3>
+            </div>
+            <label>
+              <span>Filtrar por paciente</span>
+              <select id="record-patient-filter"></select>
+            </label>
+          </div>
+
+          <div class="cards-grid cards-grid--two">
+            <article class="panel">
+              <div class="panel-head">
+                <h4>Nueva evolucion</h4>
+              </div>
+              <form id="record-form" class="form-grid">
+                <label class="full-span">
+                  <span>Paciente</span>
+                  <select id="record-patient" required></select>
+                </label>
+                <label>
+                  <span>Fecha</span>
+                  <input id="record-date" type="date" required />
+                </label>
+                <label class="full-span">
+                  <span>Motivo de consulta</span>
+                  <textarea id="record-consultation-reason" rows="3" required></textarea>
+                </label>
+                <label class="full-span">
+                  <span>Diagnostico</span>
+                  <textarea id="record-diagnosis" rows="3" required></textarea>
+                </label>
+                <label class="full-span">
+                  <span>Tratamiento</span>
+                  <textarea id="record-treatment" rows="3" required></textarea>
+                </label>
+                <label class="full-span">
+                  <span>Indicaciones</span>
+                  <textarea id="record-indications" rows="3"></textarea>
+                </label>
+                <label class="full-span">
+                  <span>Observaciones</span>
+                  <textarea id="record-notes" rows="3"></textarea>
+                </label>
+                <div class="form-actions full-span">
+                  <button type="submit" class="primary-btn">Guardar historia</button>
+                  <button type="button" class="ghost-btn" id="record-reset">Limpiar</button>
+                </div>
+              </form>
+            </article>
+
+            <article class="panel">
+              <div class="panel-head">
+                <h4>Historial</h4>
+              </div>
+              <div id="records-list" class="timeline"></div>
+            </article>
+          </div>
+        </section>
+      </main>
+    </div>
+
+    <script src="/app.js" defer></script>
+  </body>
+</html>
