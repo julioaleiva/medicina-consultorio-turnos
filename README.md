@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 # Consultorio Demo
 
 Demo web responsive para gestion basica de un consultorio medico.
@@ -130,3 +131,6 @@ ngrok http 3000
 
 - Para una segunda etapa se puede agregar login, profesionales multiples, calendario semanal y exportacion.
 - Si el cliente aprueba, la migracion a una base relacional de hosting compartido sera directa porque la UI no depende del motor de base de datos.
+=======
+# medicina-consultorio-turnos
+>>>>>>> 1b7379a57140d38ee733f7a0b66c40fa2a9ecbfa
